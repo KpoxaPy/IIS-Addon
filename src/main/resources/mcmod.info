@@ -1,0 +1,16 @@
+[
+{
+  "modid": "iisaddon",
+  "name": "IIS Addon",
+  "description": "This mod extends other mods in name of IIS pack!",
+  "version": "0.0.1",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["KpoxaPy"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
