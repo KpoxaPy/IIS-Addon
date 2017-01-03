@@ -58,27 +58,37 @@ public class IISA_GT_Utility {
             	GT_Utility.ItemNBT.convertProspectionData(aStack);
             } else { // advanced prospection data
             	String tPos = tNBT.getString("prospection_pos");
-            	String[] tNearOres = tNBT.getString("prospection_near").split("\\|");
-            	String[] tMiddleOres = tNBT.getString("prospection_middle").split("\\|");
-            	String[] tFarOres = tNBT.getString("prospection_far").split("\\|");
-            	String[] tOils = tNBT.getString("prospection_oils").split("\\|");
+            	
+            	String tNearOresStr = tNBT.getString("prospection_near");
+            	String tMiddleOresStr = tNBT.getString("prospection_middle");
+            	String tFarOresStr = tNBT.getString("prospection_far");
+            	String tOilsStr = tNBT.getString("prospection_oils");
+            	
+            	String[] tNearOres = tNearOresStr.isEmpty() ? null : tNearOresStr.split("\\|");
+            	String[] tMiddleOres = tMiddleOresStr.isEmpty() ? null : tMiddleOresStr.split("\\|");
+            	String[] tFarOres = tFarOresStr.isEmpty() ? null : tFarOresStr.split("\\|");
+            	String[] tOils = tOilsStr.isEmpty() ? null : tOilsStr.split("\\|");
             	
                 NBTTagList tNBTList = new NBTTagList();
 
                 String tPageText = "Advanced prospection\n"
                 	+ tPos + "\n"
                 	+ "Results:\n"
-                	+ "- Close Range Ores: " + tNearOres.length + "\n"
-                	+ "- Mid Range Ores: " + tMiddleOres.length + "\n"
-                	+ "- Far Range Ores: " + tFarOres.length + "\n"
-                    + "- Oils: " + tOils.length + "\n\n"
+                	+ "- Close Range Ores: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
+                	+ "- Mid Range Ores: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
+                	+ "- Far Range Ores: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
+                    + "- Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
                 	+ "Lists was sorted by volume";
                 tNBTList.appendTag(new NBTTagString(tPageText));
                 
-                fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tNearOres);
-                fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tMiddleOres);
-                fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tFarOres);
-                fillBookWithList(tNBTList, "Oils%s\n\n", "\n", Core.config.GT.Machines.AdvancedProspector.oilsPerPage, tOils);
+                if (tNearOres != null)
+                	fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tNearOres);
+                if (tMiddleOres != null)
+                	fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tMiddleOres);
+                if (tFarOres != null)
+                	fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tFarOres);
+                if (tOils != null)
+                	fillBookWithList(tNBTList, "Oils%s\n\n", "\n", Core.config.GT.Machines.AdvancedProspector.oilsPerPage, tOils);
                 
                 tNBT.setString("author", tPos);
                 tNBT.setTag("pages", tNBTList);
