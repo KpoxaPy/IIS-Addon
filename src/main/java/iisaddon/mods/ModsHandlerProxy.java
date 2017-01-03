@@ -1,9 +1,6 @@
-package iisaddon;
+package iisaddon.mods;
 
-import iisaddon.utils.Core;
-import net.minecraft.init.Blocks;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -11,44 +8,43 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import iisaddon.interfaces.IHandlerProxy;
+import iisaddon.mods.gregtech.GregtechHandler;
+import iisaddon.utils.Core;
 
-@Mod(modid = Core.MODID, name = Core.NAME, version = Core.VERSION, dependencies = Core.DEPS)
-public class IISAddon {
-	@Mod.Instance(Core.MODID)
-	public static IISAddon instance;
-	
-	@Mod.EventHandler
+public class ModsHandlerProxy implements IHandlerProxy {
+	@Override
 	public void preInit(FMLPreInitializationEvent event) {
-		Core.proxy.preInit(event);
+		if (Core.mods.Gregtech) GregtechHandler.preInit(event);
 	}
 
-	@Mod.EventHandler
+	@Override
 	public void init(FMLInitializationEvent event) {
-		Core.proxy.init(event);
+		if (Core.mods.Gregtech) GregtechHandler.init(event);
 	}
 
-	@Mod.EventHandler
+	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		Core.proxy.postInit(event);
+		if (Core.mods.Gregtech) GregtechHandler.postInit(event);
 	}
 
-	@Mod.EventHandler
+	@Override
 	public void serverStarting(FMLServerStartingEvent event) {
-		Core.proxy.serverStarting(event);
+		if (Core.mods.Gregtech) GregtechHandler.serverStarting(event);
 	}
 
-	@Mod.EventHandler
+	@Override
 	public void serverStarted(FMLServerStartedEvent event) {
-		Core.proxy.serverStarted(event);
+		if (Core.mods.Gregtech) GregtechHandler.serverStarted(event);
 	}
 
-	@Mod.EventHandler
+	@Override
 	public void serverStopping(FMLServerStoppingEvent event) {
-		Core.proxy.serverStopping(event);
+		if (Core.mods.Gregtech) GregtechHandler.serverStopping(event);
 	}
 
-	@Mod.EventHandler
+	@Override
 	public void serverStopped(FMLServerStoppedEvent event) {
-		Core.proxy.serverStopped(event);
+		if (Core.mods.Gregtech) GregtechHandler.serverStopped(event);
 	}
 }
