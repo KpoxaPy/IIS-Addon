@@ -97,11 +97,4 @@ public class Helper {
             result.add(e.getKey());
         return result;
     }
-    
-    public static String ListToString(List<String> list) {
-    	String result = "";
-    	for (String s : list)
-    		result += (result.isEmpty() ? "" : ",") + s;
-    	return result;
-    }
 }

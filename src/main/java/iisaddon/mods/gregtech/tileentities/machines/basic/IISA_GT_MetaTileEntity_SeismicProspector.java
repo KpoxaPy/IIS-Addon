@@ -92,8 +92,7 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 				return 2*(aTier + 1);
 				
 			case TIME:
-				//return 2*(aTier-1);
-				return 1;
+				return 2*(aTier - 1);
 			}
 			
 			return aTier;
@@ -140,10 +139,11 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 		if (aBaseMetaTileEntity.isServerSide()) {
 			ItemStack aStack = aPlayer.getCurrentEquippedItem();
 
-			if (!ready && (Core.helper.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 4)
-					|| Core.helper.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 2)
-					|| Core.helper.consumeItems(aPlayer, aStack, Ic2Items.dynamite.getItem(), 8)
-					|| Core.helper.consumeItems(aPlayer, aStack, Materials.Glyceryl, 1))) {
+			int tMatTierMult = TierUtil.MATERIALS.get(mTier);
+			if (!ready && (Core.helper.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 4 * tMatTierMult)
+					|| Core.helper.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 2 * tMatTierMult)
+					|| Core.helper.consumeItems(aPlayer, aStack, Ic2Items.dynamite.getItem(), 8 * tMatTierMult)
+					|| Core.helper.consumeItems(aPlayer, aStack, Materials.Glyceryl, 1 * tMatTierMult))) {
 				
 				this.ready = true;
 				this.mMaxProgresstime = (aPlayer.capabilities.isCreativeMode ? 20 : 200 * TierUtil.TIME.get(mTier));
@@ -160,7 +160,7 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 				prospectOres(tNearOres, tMiddleOres, tFarOres);
 				
 				// prospecting oils
-				ArrayList<String> tOils = new ArrayList<String>(9);
+				HashMap<String, Integer> tOils = new HashMap<String, Integer>(9);
 				prospectOils(tOils);
 
 				IISA_GT_Utility.ItemNBT.setAdvancedProspectionData(mTier,
@@ -169,7 +169,7 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 					this.getBaseMetaTileEntity().getYCoord(),
 					this.getBaseMetaTileEntity().getZCoord(),
 					this.getBaseMetaTileEntity().getWorld().provider.dimensionId,
-					tOils,
+					Core.helper.sortByValueToList(tOils),
 					Core.helper.sortByValueToList(tNearOres),
 					Core.helper.sortByValueToList(tMiddleOres),
 					Core.helper.sortByValueToList(tFarOres));
@@ -179,7 +179,7 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 		return true;
 	}
 	
-	private void prospectOils(ArrayList<String> aOils) {
+	private void prospectOils(HashMap<String, Integer> aOils) {
 		
 		int tLeftXBound = this.getBaseMetaTileEntity().getXCoord() - radius;
 		int tRightXBound = tLeftXBound + 2*radius;
@@ -202,9 +202,9 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 			}
 	}
 	
-	private void putOil(int x, int z, ArrayList<String> aOils) {
+	private void putOil(int x, int z, HashMap<String, Integer> aOils) {
 		FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), x, z);
-		aOils.add(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName());
+		aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
 	}
 
 	private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {

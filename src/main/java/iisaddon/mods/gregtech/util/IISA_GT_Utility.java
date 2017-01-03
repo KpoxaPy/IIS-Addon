@@ -2,6 +2,7 @@ package iisaddon.mods.gregtech.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import gregtech.api.util.GT_Utility;
@@ -15,6 +16,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class IISA_GT_Utility {
     public static class ItemNBT {
+    	public static int mOresPerPage = 18;
+    	public static int mOilsPerPage = 9;
 
         public static void setAdvancedProspectionData(
         		byte aTier,
@@ -34,11 +37,18 @@ public class IISA_GT_Utility {
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
 
-            // ores & oils
-            tNBT.setString("prospection_near", Core.helper.ListToString(aNearOres));
-            tNBT.setString("prospection_middle", Core.helper.ListToString(aMiddleOres));
-            tNBT.setString("prospection_far", Core.helper.ListToString(aFarOres));
-            tNBT.setString("prospection_oils", Core.helper.ListToString(aOils));
+            // ores
+            tNBT.setString("prospection_near", joinListToString(aNearOres));
+            tNBT.setString("prospection_middle", joinListToString(aMiddleOres));
+            tNBT.setString("prospection_far", joinListToString(aFarOres));
+            
+            // oils
+            ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
+            for (String aStr : aOils) {
+            	String[] aStats = aStr.split(",");
+            	tOilsTransformed.add(aStats[3] + " " + aStats[2] + "L");
+            }
+            tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
             
             Core.log.verbose("Advanced prospector result: " + tNBT.toString());
 
@@ -53,28 +63,59 @@ public class IISA_GT_Utility {
             	GT_Utility.ItemNBT.convertProspectionData(aStack);
             } else { // advanced prospection data
             	String tPos = tNBT.getString("prospection_pos");
-            	String tNearOres = tNBT.getString("prospection_near").replace(",", ", ");
-            	String tMiddleOres = tNBT.getString("prospection_middle").replace(",", ", ");
-            	String tFarOres = tNBT.getString("prospection_far").replace(",", ", ");
-            	String tOils = tNBT.getString("prospection_oils");
+            	String[] tNearOres = tNBT.getString("prospection_near").split("\\|");
+            	String[] tMiddleOres = tNBT.getString("prospection_middle").split("\\|");
+            	String[] tFarOres = tNBT.getString("prospection_far").split("\\|");
+            	String[] tOils = tNBT.getString("prospection_oils").split("\\|");
             	
-                NBTTagList tNBTList = new NBTTagList();                
-                String tPageText = "";
-                
-                tPageText = "Oils prospection\n";
-                String[] tOilsArray = tOils.split(",");
-                for (int i = 0; i < tOilsArray.length - 3; i += 4)
-                	tPageText += tOilsArray[i] + ", " + tOilsArray[i+1] + ": " + tOilsArray[i+2] + "L " + tOilsArray[i+3] + "\n";
+                NBTTagList tNBTList = new NBTTagList();
+
+                String tPageText = "Advanced prospection\n"
+                	+ tPos + "\n"
+                	+ "Results:\n"
+                	+ "- Close Range Ores: " + tNearOres.length + "\n"
+                	+ "- Mid Range Ores: " + tMiddleOres.length + "\n"
+                	+ "- Far Range Ores: " + tFarOres.length + "\n"
+                    + "- Oils: " + tOils.length + "\n\n"
+                	+ "Lists was sorted by volume";
                 tNBTList.appendTag(new NBTTagString(tPageText));
                 
-                tNBTList.appendTag(new NBTTagString("Near ores prospection\n" + tNearOres));
-                tNBTList.appendTag(new NBTTagString("Middle ores prospection\n" + tMiddleOres));
-                tNBTList.appendTag(new NBTTagString("Far ores prospection\n" + tFarOres));
-
+                fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", mOresPerPage, tNearOres);
+                fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", mOresPerPage, tMiddleOres);
+                fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", mOresPerPage, tFarOres);
+                fillBookWithList(tNBTList, "Oils%s\n\n", "\n", mOilsPerPage, tOils);
+                
                 tNBT.setString("author", tPos);
                 tNBT.setTag("pages", tNBTList);
                 GT_Utility.ItemNBT.setNBT(aStack, tNBT);
             }
+        }
+        
+        private static void fillBookWithList(NBTTagList aBook, String aPageHeader, String aListDelimiter, int aItemsPerPage, String[] list) {
+        	String aPageFormatter = " %d/%d";
+        	int tTotalPages = list.length / aItemsPerPage + (list.length % aItemsPerPage > 0 ? 1 : 0);
+            int tPage = 0;
+            String tPageText;
+            do {
+                tPageText = "";
+                for (int i = tPage*aItemsPerPage; i < (tPage+1)*aItemsPerPage && i < list.length; i += 1)
+                	tPageText += (tPageText.isEmpty() ? "" : aListDelimiter) + list[i];
+            	
+            	if (!tPageText.isEmpty()) {
+            		String tPageCounter = tTotalPages > 1 ? String.format(aPageFormatter, tPage + 1, tTotalPages) : "";
+            		NBTTagString tPageTag = new NBTTagString(String.format(aPageHeader, tPageCounter) + tPageText);
+            		aBook.appendTag(tPageTag);
+            	}
+            	
+                ++tPage;
+            } while (!tPageText.isEmpty());
+        }
+        
+        private static String joinListToString(List<String> list) {
+        	String result = "";
+        	for (String s : list)
+        		result += (result.isEmpty() ? "" : "|") + s;
+        	return result;
         }
     }
 }
