@@ -27,6 +27,9 @@ version = "${config.iisaddon.version}"
 group= "iisaddon"
 archivesBaseName = "iisaddon"
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 minecraft {
     version = "${config.minecraft.version}-${config.forge.version}"
     runDir = "eclipse"

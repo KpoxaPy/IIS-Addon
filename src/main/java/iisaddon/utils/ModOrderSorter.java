@@ -64,7 +64,8 @@ public class ModOrderSorter {
 	        for (short i = 0; i < tNewModsList.size(); i += 1) {
 	            String tModID = ((ModContainer) tNewModsList.get(i)).getModId().toLowerCase(Locale.ENGLISH);
 	            
-	            mAfterMap.replace(tModID, true);
+	            if (mAfterMap.containsKey(tModID))
+	                mAfterMap.put(tModID, true);
 	            
 	            // if all after-requests found, push mod to list
 	            if (checkAfterList()) {
