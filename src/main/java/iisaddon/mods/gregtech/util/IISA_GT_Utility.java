@@ -16,9 +16,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class IISA_GT_Utility {
     public static class ItemNBT {
-    	public static int mOresPerPage = 18;
-    	public static int mOilsPerPage = 9;
-
         public static void setAdvancedProspectionData(
         		byte aTier,
         		ItemStack aStack,
@@ -31,8 +28,6 @@ public class IISA_GT_Utility {
 			GT_Utility.ItemNBT.setBookTitle(aStack, "Raw Prospection Data");
 			
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
-
-            //tNBT.setString("prospection", "");
             
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
@@ -80,10 +75,10 @@ public class IISA_GT_Utility {
                 	+ "Lists was sorted by volume";
                 tNBTList.appendTag(new NBTTagString(tPageText));
                 
-                fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", mOresPerPage, tNearOres);
-                fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", mOresPerPage, tMiddleOres);
-                fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", mOresPerPage, tFarOres);
-                fillBookWithList(tNBTList, "Oils%s\n\n", "\n", mOilsPerPage, tOils);
+                fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tNearOres);
+                fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tMiddleOres);
+                fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tFarOres);
+                fillBookWithList(tNBTList, "Oils%s\n\n", "\n", Core.config.GT.Machines.AdvancedProspector.oilsPerPage, tOils);
                 
                 tNBT.setString("author", tPos);
                 tNBT.setTag("pages", tNBTList);

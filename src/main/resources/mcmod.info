@@ -3,7 +3,7 @@
   "modid": "iisaddon",
   "name": "IIS Addon",
   "description": "This mod extends other mods in name of IIS pack!",
-  "version": "0.1.0.2",
+  "version": "0.1.0.3",
   "mcversion": "1.7.10",
   "url": "",
   "updateUrl": "",

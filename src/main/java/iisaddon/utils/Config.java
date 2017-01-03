@@ -19,6 +19,8 @@ public class Config {
 				public static boolean enable = true;
 				public static int radius = 95;
 				public static int step = 4;
+				public static int oresPerPage = 20;
+				public static int oilsPerPage = 9;
 			}
 			public static AdvancedProspector AdvancedProspector;
 			
@@ -83,12 +85,16 @@ public class Config {
 		// Gregtech
 		GT.enabled = cfg.getBoolean("enabled", "gregtech", GT.enabled, "Gregtech stuff");
 		
-		GT.Machines.AdvancedProspector.enable = cfg.getBoolean("advanced_prospector", "gregtech.machines",
-				GT.Machines.AdvancedProspector.enable, "Advanced seismic prospector");
-		GT.Machines.AdvancedProspector.radius = cfg.getInt("advanced_prospector_radius", "gregtech.machines",
-				GT.Machines.AdvancedProspector.radius, 1, 511, "Advanced seismic prospector radius");
-		GT.Machines.AdvancedProspector.step = cfg.getInt("advanced_prospector_step", "gregtech.machines",
-				GT.Machines.AdvancedProspector.step, 1, 16, "Advanced seismic prospector step");
+		GT.Machines.AdvancedProspector.enable = cfg.getBoolean("enabled", "gregtech.machines.advanced_prospector",
+				GT.Machines.AdvancedProspector.enable, "Advanced seismic prospector switch");
+		GT.Machines.AdvancedProspector.radius = cfg.getInt("radius", "gregtech.machines.advanced_prospector",
+				GT.Machines.AdvancedProspector.radius, 1, 511, "Prospection radius");
+		GT.Machines.AdvancedProspector.step = cfg.getInt("step", "gregtech.machines.advanced_prospector",
+				GT.Machines.AdvancedProspector.step, 1, 16, "Prospection step");
+		GT.Machines.AdvancedProspector.oresPerPage = cfg.getInt("ores_per_page", "gregtech.machines.advanced_prospector",
+				GT.Machines.AdvancedProspector.oresPerPage, 1, 25, "How many ores should be on one page");
+		GT.Machines.AdvancedProspector.oilsPerPage = cfg.getInt("oils_per_page", "gregtech.machines.advanced_prospector",
+				GT.Machines.AdvancedProspector.oilsPerPage, 1, 13, "How many oils should be on one pagep");
 		GT.Machines.Scanner.enable = GT.Machines.AdvancedProspector.enable;
 
 		cfg.save();
