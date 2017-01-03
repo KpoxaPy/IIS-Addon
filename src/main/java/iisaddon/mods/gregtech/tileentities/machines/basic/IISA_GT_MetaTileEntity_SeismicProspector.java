@@ -102,7 +102,6 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 	public IISA_GT_MetaTileEntity_SeismicProspector(int aID, String aName, String aNameRegional, int aTier, int aRadius, int aStep) {
 		super(aID, aName, aNameRegional, aTier, 1, // amperage
 				"Place, activate with explosives ("
-				+ 8 * TierUtil.MATERIALS.get(aTier) + " Dynamite, "
 				+ 1 * TierUtil.MATERIALS.get(aTier) + " Glyceryl, "
 				+ 4 * TierUtil.MATERIALS.get(aTier) + " TNT or "
 				+ 2 * TierUtil.MATERIALS.get(aTier) + " ITNT), use Data Stick",
@@ -142,7 +141,6 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 			int tMatTierMult = TierUtil.MATERIALS.get(mTier);
 			if (!ready && (Core.helper.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 4 * tMatTierMult)
 					|| Core.helper.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 2 * tMatTierMult)
-					|| Core.helper.consumeItems(aPlayer, aStack, Ic2Items.dynamite.getItem(), 8 * tMatTierMult)
 					|| Core.helper.consumeItems(aPlayer, aStack, Materials.Glyceryl, 1 * tMatTierMult))) {
 				
 				this.ready = true;
