@@ -77,6 +77,8 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 	
 	boolean ready = false;
 	int radius;
+	int near;
+	int middle;
 	int step;
 	
 	static enum TierUtil {
@@ -118,19 +120,24 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 						new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE),
 						new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_ROCK_BREAKER) });
 		radius = aRadius;
+		near = radius / 3;
+		near = near + near % 2; // making near value even;
+		middle = near * 2;
 		step = aStep;
 	}
 
-	public IISA_GT_MetaTileEntity_SeismicProspector(String aName, int aTier, String aDescription, ITexture[][][] aTextures,
-			String aGUIName, String aNEIName, int aRadius, int aStep) {
+	protected IISA_GT_MetaTileEntity_SeismicProspector(String aName, int aTier, String aDescription, ITexture[][][] aTextures,
+			String aGUIName, String aNEIName, int aNear, int aMiddle, int aRadius, int aStep) {
 		super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
 		radius = aRadius;
+		near = aNear;
+		middle = aMiddle;
 		step = aStep;
 	}
 
 	public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
 		return new IISA_GT_MetaTileEntity_SeismicProspector(this.mName, this.mTier, this.mDescription, this.mTextures,
-				this.mGUIName, this.mNEIName, this.radius, this.step);
+				this.mGUIName, this.mNEIName, this.near, this.middle, this.radius, this.step);
 	}
 
 	@Override
@@ -170,7 +177,8 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 					Core.helper.sortByValueToList(tOils),
 					Core.helper.sortByValueToList(tNearOres),
 					Core.helper.sortByValueToList(tMiddleOres),
-					Core.helper.sortByValueToList(tFarOres));
+					Core.helper.sortByValueToList(tFarOres),
+					near, middle, radius);
 			}
 		}
 
@@ -206,11 +214,7 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 			aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
 	}
 
-	private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {
-		
-		int tNearBound = radius / 3;
-		int tMiddleBound = tNearBound * 2;
-		
+	private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {		
 		int tLeftXBound = this.getBaseMetaTileEntity().getXCoord() - radius;
 		int tRightXBound = tLeftXBound + 2*radius;
 		
@@ -222,9 +226,9 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 				int di = Math.abs(i - this.getBaseMetaTileEntity().getXCoord());
 				int dk = Math.abs(k - this.getBaseMetaTileEntity().getZCoord());
 				
-				if (di <= tNearBound && dk <= tNearBound)
+				if (di <= near && dk <= near)
 					prospectHole(i, k, aNearOres);
-				else if (di <= tMiddleBound && dk <= tMiddleBound)
+				else if (di <= middle && dk <= middle)
 					prospectHole(i, k, aMiddleOres);
 				else
 					prospectHole(i, k, aFarOres);

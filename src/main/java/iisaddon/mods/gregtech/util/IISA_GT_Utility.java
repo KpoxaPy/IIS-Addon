@@ -23,7 +23,8 @@ public class IISA_GT_Utility {
         		ArrayList<String> aOils,
         		ArrayList<String> aNearOres,
         		ArrayList<String> aMiddleOres,
-        		ArrayList<String> aFarOres) {
+        		ArrayList<String> aFarOres,
+        		int aNear, int aMiddle, int aRadius) {
         	
 			GT_Utility.ItemNBT.setBookTitle(aStack, "Raw Prospection Data");
 			
@@ -45,6 +46,8 @@ public class IISA_GT_Utility {
             }
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
             
+            tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
+            
             Core.log.verbose("Advanced prospector result: " + tNBT.toString());
 
             GT_Utility.ItemNBT.setNBT(aStack, tNBT);
@@ -58,6 +61,7 @@ public class IISA_GT_Utility {
             	GT_Utility.ItemNBT.convertProspectionData(aStack);
             } else { // advanced prospection data
             	String tPos = tNBT.getString("prospection_pos");
+            	String[] tBounds = tNBT.getString("prospection_bounds").split("\\|");
             	
             	String tNearOresStr = tNBT.getString("prospection_near");
             	String tMiddleOresStr = tNBT.getString("prospection_middle");
@@ -89,6 +93,12 @@ public class IISA_GT_Utility {
                 	fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", Core.config.GT.Machines.AdvancedProspector.oresPerPage, tFarOres);
                 if (tOils != null)
                 	fillBookWithList(tNBTList, "Oils%s\n\n", "\n", Core.config.GT.Machines.AdvancedProspector.oilsPerPage, tOils);
+                
+                tPageText = "Notes\n\n"
+                	+ "Close range:\nR <= " + tBounds[0] + "\n"
+                    + "Mid range:\n" + tBounds[0] + " < R <= " + tBounds[1] + "\n"
+                    + "Far range:\n" + tBounds[1] + " < R <= " + tBounds[2];
+                tNBTList.appendTag(new NBTTagString(tPageText));
                 
                 tNBT.setString("author", tPos);
                 tNBT.setTag("pages", tNBTList);
