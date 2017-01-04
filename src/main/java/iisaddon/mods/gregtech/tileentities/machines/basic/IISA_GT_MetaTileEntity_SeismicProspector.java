@@ -67,10 +67,10 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 		GT_ModHandler.addCraftingRecipe(IISA_GT_ItemList.Advanced_Seismic_Prospector.get(1L, new Object[0]),
 				GregtechHandler.bitsd,
 				new Object[] { "WWW", "EME", "CCC",
-						'M', ItemList.Hull_HV,
-						'W', OrePrefixes.plateDouble.get(Materials.StainlessSteel),
-						'E', OrePrefixes.circuit.get(Materials.Advanced),
-						'C', ItemList.Sensor_HV });
+						'M', ItemList.Hull_EV,
+						'W', OrePrefixes.plateDouble.get(Materials.VanadiumSteel),
+						'E', OrePrefixes.circuit.get(Materials.Data),
+						'C', ItemList.Sensor_EV });
 	}
 	/****/
 	
