@@ -2,4 +2,4 @@
 New machine: Advanced Seismic Prospector
 
 ## Builds
-[iisaddon-0.1.0.2.jar](https://yadi.sk/d/SCInesiswLSXe/builds/iis-addon/iisaddon-0.1.0.2.jar)
+[iisaddon-0.1.0.3.jar](https://yadi.sk/d/SCInesiswLSXe/builds/iis-addon/iisaddon-0.1.0.3.jar)
