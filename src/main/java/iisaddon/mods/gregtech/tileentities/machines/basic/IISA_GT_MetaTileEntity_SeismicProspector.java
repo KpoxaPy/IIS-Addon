@@ -202,7 +202,8 @@ public class IISA_GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_
 	
 	private void putOil(int x, int z, HashMap<String, Integer> aOils) {
 		FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), x, z);
-		aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
+		if (tFluid.amount / 5000 > 0)
+			aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
 	}
 
 	private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {
